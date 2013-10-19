@@ -92,6 +92,14 @@ describe Rack::Multiplexer do
       end
     end
 
+    context "with block routing" do
+      it "delegates to given block as rack application" do
+        multiplexer = described_class.new
+        multiplexer.get("/a") {|env| [200, {}, ["a"]] }
+        multiplexer.call(env.merge("REQUEST_METHOD" => "GET", "PATH_INFO" => "/a"))[0].should == 200
+      end
+    end
+
     context "with any routing" do
       it "matches any method" do
         multiplexer = described_class.new

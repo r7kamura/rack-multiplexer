@@ -23,3 +23,21 @@ multiplexer.get("/f/:g", ->(env) { [200, {}, [env["rack.request.query_hash"]["g"
 
 run multiplexer
 ```
+
+## DSL
+The block is with you, always.
+
+```ruby
+# config.ru
+require "rack-multiplexer"
+
+run Rack::Multiplexer.new {
+  get "/a" do
+    [200, {}, ["a"]]
+  end
+
+  get "/b/:c" do
+    [200, {}, ["d"]]
+  end
+}
+```

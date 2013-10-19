@@ -28,24 +28,24 @@ module Rack
       ).call(env)
     end
 
-    def get(pattern, application)
-      append("GET", pattern, application)
+    def get(pattern, application = nil, &block)
+      append("GET", pattern, application || block)
     end
 
-    def post(pattern, application)
-      append("POST", pattern, application)
+    def post(pattern, application = nil, &block)
+      append("POST", pattern, application || block)
     end
 
-    def put(pattern, application)
-      append("PUT", pattern, application)
+    def put(pattern, application = nil, &block)
+      append("PUT", pattern, application || block)
     end
 
-    def delete(pattern, application)
-      append("DELETE", pattern, application)
+    def delete(pattern, application = nil, &block)
+      append("DELETE", pattern, application || block)
     end
 
-    def any(pattern, application)
-      append("ANY", pattern, application)
+    def any(pattern, application, &block)
+      append("ANY", pattern, application || block)
     end
 
     def append(method, pattern, application)
