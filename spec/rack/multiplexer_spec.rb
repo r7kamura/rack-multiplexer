@@ -28,7 +28,7 @@ describe Rack::Multiplexer do
         multiplexer = described_class.new
         multiplexer.call(env.merge("REQUEST_METHOD" => "GET", "PATH_INFO" => "/a")).should == [
           404,
-          { "Content-Type" => "text/plain", "Content-Length" => 0 },
+          { "Content-Type" => "text/plain", "Content-Length" => "0" },
           [""],
         ]
       end
