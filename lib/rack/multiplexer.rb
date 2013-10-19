@@ -1,7 +1,7 @@
 require "rack/multiplexer/version"
 
 module Rack
-  module Multiplexer
+  class Multiplexer
     # Your code goes here...
   end
 end
