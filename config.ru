@@ -1,16 +1,3 @@
-# Rack::Multiplexer
-Provides a simple router & dispatcher for Rack applications.
-
-## Installation
-```
-gem install rack-multiplexer
-```
-
-## Usage
-For `rackup`.
-
-```ruby
-# config.ru
 require "rack-multiplexer"
 
 multiplexer = Rack::Multiplexer.new
@@ -22,4 +9,3 @@ multiplexer.delete("/e", ->(env) { [200, {}, ["c"]] })
 multiplexer.get("/f/:g", ->(env) { [200, {}, [env["rack.request.query_hash"]["g"]]] })
 
 run multiplexer
-```
