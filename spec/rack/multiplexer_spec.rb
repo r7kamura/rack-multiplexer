@@ -110,5 +110,15 @@ describe Rack::Multiplexer do
         multiplexer.call(env.merge("REQUEST_METHOD" => "HEAD", "PATH_INFO" => "/a"))[0].should == 200
       end
     end
+
+    context "with path including '.'" do
+      it "matches exactly" do
+        multiplexer = described_class.new
+        multiplexer.get("/a.*") {|env| [200, {}, ["ok"]] }
+        multiplexer.call(env.merge("REQUEST_METHOD" => "GET", "PATH_INFO" => "/a.*"))[0].should == 200
+        multiplexer.call(env.merge("REQUEST_METHOD" => "GET", "PATH_INFO" => "/aaa"))[0].should == 404
+        multiplexer.call(env.merge("REQUEST_METHOD" => "GET", "PATH_INFO" => "/abc"))[0].should == 404
+      end
+    end
   end
 end
