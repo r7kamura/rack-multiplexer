@@ -16,18 +16,7 @@ require "rack/request"
 #
 module Rack
   class Multiplexer
-    DEFAULT_NOT_FOUND_APPLICATION = ->(env) {
-      [
-        404,
-        {
-          "Content-Type" => "text/plain",
-          "Content-Length" => "0",
-        },
-        [""],
-      ]
-    }
-
-    def initialize(not_found_application = DEFAULT_NOT_FOUND_APPLICATION, &block)
+    def initialize(not_found_application = default_not_found_application, &block)
       @not_found_application = not_found_application
       instance_eval(&block) if block
     end
@@ -75,7 +64,7 @@ module Rack
           404,
           {
             "Content-Type" => "text/plain",
-            "Content-Length" => 0,
+            "Content-Length" => "0",
           },
           [""],
         ]
