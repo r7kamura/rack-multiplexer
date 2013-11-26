@@ -2,8 +2,7 @@ require "rack/multiplexer/version"
 require "rack/request"
 
 # Provides a simple router & dispatcher for Rack applications as a Rack application.
-# From Ruby's standpoint, the routing algorithm has only O(1) time complexity
-# because all routes are compiled as one Regexp.
+# The routing algorithm has only O(1) time complexity because all routes are compiled into one Regexp.
 #
 # Example:
 #

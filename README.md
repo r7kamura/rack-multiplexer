@@ -1,6 +1,6 @@
 # Rack::Multiplexer
-Provides a simple router & dispatcher for Rack applications as a Rack application.
-The routing process takes O(1) complexity because all routes are compiled as one Regexp.
+Provides a simple router & dispatcher for Rack applications as a Rack application.  
+The routing algorithm has only O(1) time complexity because all routes are compiled into one Regexp.
 
 ## Installation
 ```
