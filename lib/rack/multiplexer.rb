@@ -123,7 +123,7 @@ module Rack
         keys = []
         segments = []
         pattern.split("/").each do |segment|
-          segments << segment.gsub(PLACEHOLDER_REGEXP, "([^#?/]+)")
+          segments << Regexp.escape(segment).gsub(PLACEHOLDER_REGEXP, "([^#?/]+)")
           if key = Regexp.last_match(1)
             keys << key
           end
