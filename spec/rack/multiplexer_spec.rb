@@ -74,6 +74,7 @@ describe Rack::Multiplexer do
       it "delegates with rack.request.query_hash" do
         multiplexer = described_class.new
         multiplexer.get("/:any", application)
+        multiplexer.get("/a", application)
         multiplexer.call(env.merge("REQUEST_METHOD" => "GET", "PATH_INFO" => "/a"))[2][0].should == "/a?any=a&"
       end
     end

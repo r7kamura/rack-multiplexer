@@ -1,6 +1,20 @@
 require "rack/multiplexer/version"
 require "rack/request"
 
+# Provides a simple router & dispatcher for Rack applications as a Rack application.
+# From Ruby's standpoint, the routing algorithm has only O(1) time complexity
+# because all routes are compiled as one Regexp.
+#
+# Example:
+#
+#   # config.ru
+#   multiplexer = Rack::Multiplexer.new
+#   multiplexer.get("/a", ->(env) { [200, {}, ["a"]] })
+#   multiplexer.get("/b", ->(env) { [200, {}, ["b"]] })
+#   multiplexer.put("/c", ->(env) { [200, {}, ["c"]] })
+#   multiplexer.get("/d/:e", ->(env) { [200, {}, [env["rack.request.query_hash"]["e"]]] })
+#   run multiplexer
+#
 module Rack
   class Multiplexer
     DEFAULT_NOT_FOUND_APPLICATION = ->(env) {
@@ -22,8 +36,8 @@ module Rack
     def call(env)
       path = env["PATH_INFO"]
       (
-        routes[env["REQUEST_METHOD"]].find {|route| route.match?(path) } ||
-        routes["ANY"].find {|route| route.match?(path) } ||
+        routes[env["REQUEST_METHOD"]].find(path) ||
+        routes["ANY"].find(path) ||
         @not_found_application
       ).call(env)
     end
@@ -52,9 +66,8 @@ module Rack
       routes[method] << Route.new(pattern, application)
     end
 
-    # @routes are indexed by method.
     def routes
-      @routes ||= Hash.new {|hash, key| hash[key] = [] }
+      @routes ||= Hash.new {|hash, key| hash[key] = Routes.new }
     end
 
     def default_not_found_application
@@ -70,8 +83,37 @@ module Rack
       }
     end
 
+    class Routes
+      def initialize
+        @routes = []
+      end
+
+      def find(path)
+        if regexp === path
+          @routes.size.times do |i|
+            return @routes[i] if Regexp.last_match("_#{i}")
+          end
+        end
+      end
+
+      def <<(route)
+        @routes << route
+      end
+
+      private
+
+      def regexp
+        @regexp ||= begin
+          regexps = @routes.map.with_index {|route, index| /(?<_#{index}>#{route.regexp})/ }
+          /\A#{Regexp.union(regexps)}\z/
+        end
+      end
+    end
+
     class Route
       PLACEHOLDER_REGEXP = /:(\w+)/
+
+      attr_reader :regexp
 
       def initialize(pattern, application)
         @application = application
@@ -98,7 +140,7 @@ module Rack
             keys << key
           end
         end
-        return Regexp.new("\\A#{segments.join(?/)}\\z"), keys
+        return Regexp.new(segments.join(?/)), keys
       end
     end
   end
