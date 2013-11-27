@@ -8,7 +8,7 @@ require "benchmark"
 multiplexer = Rack::Multiplexer.new
 (?a..?z).each do |head|
   (?a..?z).each do |tail|
-    multiplexer.get("/#{head}{tail}") do
+    multiplexer.get("/#{head}#{tail}") do
       [200, {}, ["OK"]]
     end
   end
