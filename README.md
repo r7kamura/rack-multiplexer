@@ -1,6 +1,6 @@
 # Rack::Multiplexer
 Provides a simple router & dispatcher for Rack applications as a Rack application.  
-The routing algorithm has only O(1) time complexity because all routes are compiled into one Regexp.
+The routing algorithm has only O(1) time complexity in Ruby level because all routes are compiled into one Regexp.
 
 ## Installation
 ```
