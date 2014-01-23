@@ -128,7 +128,7 @@ module Rack
             keys << key
           end
         end
-        return Regexp.new(segments.join(?/)), keys
+        return Regexp.new(segments.any? ? segments.join(?/) : ?/), keys
       end
     end
   end

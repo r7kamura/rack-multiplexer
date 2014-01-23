@@ -120,5 +120,13 @@ describe Rack::Multiplexer do
         multiplexer.call(env.merge("REQUEST_METHOD" => "GET", "PATH_INFO" => "/abc"))[0].should == 404
       end
     end
+
+    context "with root path" do
+      it "delegates to registered application" do
+        multiplexer = described_class.new
+        multiplexer.get("/", application)
+        multiplexer.call(env.merge("REQUEST_METHOD" => "GET", "PATH_INFO" => "/"))[0].should == 200
+      end
+    end
   end
 end
