@@ -16,7 +16,7 @@ require "rack/request"
 #
 module Rack
   class Multiplexer
-    def initialize(not_found_application = default_not_found_application, &block)
+    def initialize(not_found_application = nil, &block)
       @not_found_application = not_found_application
       instance_eval(&block) if block
     end
@@ -26,7 +26,7 @@ module Rack
       (
         routes[env["REQUEST_METHOD"]].find(path) ||
         routes["ANY"].find(path) ||
-        @not_found_application
+        not_found_application
       ).call(env)
     end
 
@@ -58,8 +58,8 @@ module Rack
       @routes ||= Hash.new {|hash, key| hash[key] = Routes.new }
     end
 
-    def default_not_found_application
-      ->(env) {
+    def not_found_application
+      @not_found_application ||= ->(env) {
         [
           404,
           {
