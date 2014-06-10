@@ -42,6 +42,10 @@ module Rack
       append("PUT", pattern, application || block)
     end
 
+    def patch(pattern, application = nil, &block)
+      append("PATCH", pattern, application || block)
+    end
+
     def delete(pattern, application = nil, &block)
       append("DELETE", pattern, application || block)
     end

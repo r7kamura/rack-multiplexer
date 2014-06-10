@@ -1,3 +1,6 @@
+## 0.0.8
+* Support PATCH request method
+
 ## 0.0.7
 * Remove delendency on rspec
 
